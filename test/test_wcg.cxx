@@ -51,7 +51,7 @@ void dump_time(std::string msg, ptime t1, ptime t2)
 int main()
 {
     ptime t1(microsec_clock::local_time());
-    GeomDataSource& gds = *make_example_gds(3*units::mm);
+    GeomDataSource& gds = *make_example_gds(10*units::mm);
     ptime t2(microsec_clock::local_time());
     WireCrossingGraph wcg(gds);
     ptime t3(microsec_clock::local_time());
