@@ -9,18 +9,16 @@
 
 namespace WireCellGraph {
 
-    class WireCrossingGraph : public PropertyGraph<WireCellGraph::WireProperty, 
-						   WireCellGraph::PointProperty>
-    {
-    public:
-	WireCrossingGraph(WireCell::GeomDataSource& gds);
+    /** WireCrossingGraph - a graph with vertices representing wires
+     * and edges representing their crossing points.
+     */
+    typedef PropertyGraph<WireCellGraph::WireProperty, 
+			  WireCellGraph::PointProperty> WireCrossingGraph;
 
-    private:
-	WireCell::GeomDataSource& gds;
-	void fill();
-
-    };
-
-};
-
+    void fill_wirecrossinggraph(WireCell::GeomDataSource& gds, 
+				WireCrossingGraph& wcg);
+}
 #endif
+
+
+

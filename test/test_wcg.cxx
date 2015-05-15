@@ -46,37 +46,64 @@ void dump_time(std::string msg, ptime t1, ptime t2)
    #edges   : 199081
    
    O(N^3)'ed....
+
+   After adding better caching in GDS::by_planeindex() and GDS::angle() and removing -ggdb3
+
+Wire pitch: 10 mm
+Made GDS in 0 seconds
+Made WCG in 0.181 seconds
+#wires: U: 116 V: 115 W: 100 
+#vertices: 331
+#edges   : 17844
+Wire pitch: 5 mm
+Made GDS in 0 seconds
+Made WCG in 1.412 seconds
+#wires: U: 231 V: 229 W: 200 
+#vertices: 660
+#edges   : 71455
+Wire pitch: 3 mm
+Made GDS in 0.001 seconds
+Made WCG in 6.736 seconds
+#wires: U: 385 V: 381 W: 334 
+#vertices: 1100
+#edges   : 199081
+
  */
 
 int main()
 {
-    ptime t1(microsec_clock::local_time());
-    GeomDataSource& gds = *make_example_gds(10*units::mm);
-    ptime t2(microsec_clock::local_time());
-    WireCrossingGraph wcg(gds);
-    ptime t3(microsec_clock::local_time());
+    double sizes[] = { 10*units::mm, 5*units::mm, 3*units::mm, -1 };
+    for (int isize=0; sizes[isize]>0; ++isize) {
 
-    dump_time("Made GDS in",t1,t2);
-    dump_time("Made WCG in",t2,t3);
+	ptime t1(microsec_clock::local_time());
+	GeomDataSource& gds = *make_example_gds(sizes[isize]);
+	ptime t2(microsec_clock::local_time());
+	WireCrossingGraph wcg;
+	WireCellGraph::fill_wirecrossinggraph(gds, wcg);
+	ptime t3(microsec_clock::local_time());
 
-    cerr << "#wires: " 
-	 << "U: " << gds.wires_in_plane(kUwire).size() << " "
-	 << "V: " << gds.wires_in_plane(kVwire).size() << " "
-	 << "W: " << gds.wires_in_plane(kYwire).size() << " "
-	 << endl;
-    cerr << "#vertices: " << wcg.getVertexCount() << endl;
-    cerr << "#edges   : " << wcg.getEdgeCount() << endl;
+	cout << "Wire pitch: " << sizes[isize]/units::mm << " mm\n";
+	dump_time("Made GDS in",t1,t2);
+	dump_time("Made WCG in",t2,t3);
 
-    WireCrossingGraph::vertex_iter vert_it, vert_start, vert_stop;
-    boost::tie(vert_start, vert_stop) = wcg.getVertices();
-    for (vert_it=vert_start; vert_it != vert_stop; ++vert_it) {
-//	cerr << *vert_start << endl;
+	cerr << "#wires: " 
+	     << "U: " << gds.wires_in_plane(kUwire).size() << " "
+	     << "V: " << gds.wires_in_plane(kVwire).size() << " "
+	     << "W: " << gds.wires_in_plane(kYwire).size() << " "
+	     << endl;
+	cerr << "#vertices: " << wcg.getVertexCount() << endl;
+	cerr << "#edges   : " << wcg.getEdgeCount() << endl;
     }
-
-    WireCrossingGraph::edge_iter edge_it, edge_start, edge_stop;
-    boost::tie(edge_start,edge_stop) = wcg.getEdges();
-    for (edge_it=edge_start; edge_it!=edge_stop; ++edge_it) {
-//	cerr << *edge_it << endl;
-    }
+// 	WireCrossingGraph::vertex_iter vert_it, vert_start, vert_stop;
+// 	boost::tie(vert_start, vert_stop) = wcg.getVertices();
+// 	for (vert_it=vert_start; vert_it != vert_stop; ++vert_it) {
+// //	cerr << *vert_start << endl;
+// 	}
+	
+// 	WireCrossingGraph::edge_iter edge_it, edge_start, edge_stop;
+// 	boost::tie(edge_start,edge_stop) = wcg.getEdges();
+//     for (edge_it=edge_start; edge_it!=edge_stop; ++edge_it) {
+// //	cerr << *edge_it << endl;
+//     }
     
 }
