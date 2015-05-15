@@ -29,7 +29,8 @@ typedef boost::graph_traits<PositionGraph>::vertex_descriptor Vertex;
 typedef boost::graph_traits<PositionGraph>::edge_descriptor Edge;
 typedef boost::property_map<PositionGraph, boost::edge_index_t>::type EdgeInd_Map;
 
-enum EdgeType_t { unknown=0, bound, internal, neighbor };
+enum EdgeType_t { unknown_edge=0, bound_edge, internal_edge, neighbor_edge };
+enum VertexType_t { unknown_vertex=0, center_vertex, corner_vertex };
 
 
 class CellGraph {
@@ -38,6 +39,7 @@ public:				       // public for development
     int nedges;			       // count number of edges
     EdgeInd_Map edge_ind;	       // edge->index lookup
     std::vector<EdgeType_t> edge_type; // hold type of edge 
+    std::vector<VertexType_t> vertex_type; // what kind of vertex
 
 public:
     CellGraph() 
@@ -70,21 +72,35 @@ public:
 	for (int ind=0; ind<npos; ++ind) {
 	    center.first += pos[ind].first;
 	    center.second += pos[ind].second;
-	    vertex.push_back(boost::add_vertex(pos[ind], graph)); // find/make graph vertices
+	    Vertex v = boost::add_vertex(pos[ind], graph);
+	    vertex.push_back(v); // find/make graph vertices
+	    vertex_type.resize(v+1, unknown_vertex);
+	    vertex_type[v] = corner_vertex;
 	}
 	center.first /= npos;
 	center.second /= npos;
-	Vertex center_vertex = boost::add_vertex(center, graph);
+	Vertex cv = boost::add_vertex(center, graph);
+	vertex_type.resize(cv+1, unknown_vertex);
+	vertex_type[cv] = center_vertex;
+	
 
 	for (int ind=0; ind<npos; ++ind) {
 	    int next_ind=(ind+1)%npos; // circle
 
 	    // add sides of cell
-	    if (boost::add_edge(vertex[ind], vertex[next_ind], nedges, graph).second) {
+	    std::pair<Edge,bool> side = boost::add_edge(vertex[ind], vertex[next_ind], nedges, graph);
+	    if (side.second) {
+		int ind = edge_ind[side.first];
+		edge_type.resize(ind+1, unknown_edge);
+		edge_type[ind] = bound_edge;
 		++nedges;
 	    }
 	    // add center->corner of cell
-	    if (boost::add_edge(center_vertex, vertex[ind], nedges, graph).second) {
+	    std::pair<Edge,bool> intern = boost::add_edge(cv, vertex[ind], nedges, graph);
+	    if (intern.second) {
+		int ind = edge_ind[side.first];
+		edge_type.resize(ind+1, unknown_edge);
+		edge_type[ind] = internal_edge;
 		++nedges;
 	    }
 	    else {
@@ -233,7 +249,7 @@ Made CG in 1.923 seconds
     */
 
     double sizes[] = { 10*units::mm, 5*units::mm, 3*units::mm, -1 };
-    for (int isize=1; sizes[isize]>0; ++isize) {
+    for (int isize=2; sizes[isize]>0; ++isize) {
 	ptime t1(microsec_clock::local_time());
 	WireCell::GeomDataSource& gds = *WireCell::make_example_gds(sizes[isize]);
 	ptime t2(microsec_clock::local_time());
