@@ -143,7 +143,7 @@ public:
 		float dis_v[2] = { dis_v_wire - pitch_v, dis_v_wire + pitch_v };
 
 
-		WireCell::PointVector puv(4);
+		std::vector<Vector> puv(4);
 		float dis_puv[4];
 		for (int ind=0; ind<4; ++ind) {
 		    // fixme: we are not handling the case where one
@@ -172,7 +172,7 @@ public:
 
 		    for (int ind=0; ind<4; ++ind) {
 			{		// fresh scope
-			    WireCell::Point pointvec;
+			    WireCell::Vector pointvec;
 			    if (gds.crossing_point(dis_u[box_ind[ind].first], dis_w[box_ind[ind].second], 
 						   kUwire, kYwire, pointvec)) 
 			    {
@@ -184,7 +184,7 @@ public:
 			}
 
 			{		// fresh scope
-			    WireCell::Point pointvec;
+			    WireCell::Vector pointvec;
 			    if (gds.crossing_point(dis_v[box_ind[ind].first], dis_w[box_ind[ind].second], 
 						   kVwire, kYwire, pointvec)) 
 			    {

@@ -38,7 +38,7 @@ void WireCellGraph::fill_wirecrossinggraph(WireCell::GeomDataSource& gds,
 	    WireCrossingGraph::Vertex& v_vertex = v_vertices[v_ind];
 	    const WireCell::GeomWire& v_wire = *v_wires[v_ind];
 
-	    WireCell::Point pt_uv;
+	    WireCell::Vector pt_uv;
 	    if (! gds.crossing_point(u_wire, v_wire, pt_uv)) {
 		continue;
 	    }
@@ -49,12 +49,12 @@ void WireCellGraph::fill_wirecrossinggraph(WireCell::GeomDataSource& gds,
 		WireCrossingGraph::Vertex& w_vertex = w_vertices[w_ind];
 		const WireCell::GeomWire& w_wire = *w_wires[w_ind];
     
-		WireCell::Point pt_uw;
+		WireCell::Vector pt_uw;
 		if (gds.crossing_point(u_wire, w_wire, pt_uw)) {
 		    wcg.AddEdge(u_vertex, w_vertex, PointProperty(pt_uw));
 		}
 		
-		WireCell::Point pt_vw;
+		WireCell::Vector pt_vw;
 		if (gds.crossing_point(v_wire, w_wire, pt_vw)) {
 		    wcg.AddEdge(v_vertex, w_vertex, PointProperty(pt_vw));
 		}
