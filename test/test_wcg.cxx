@@ -72,8 +72,8 @@ Made WCG in 6.736 seconds
 
 int main()
 {
-    double sizes[] = { 10*units::mm, 5*units::mm, 3*units::mm, -1 };
-    for (int isize=0; sizes[isize]>0; ++isize) {
+    double sizes[] = { 3*units::mm, 5*units::mm, 10*units::mm, -1 };
+    for (int isize=2; sizes[isize]>0; ++isize) {
 
 	ptime t1(microsec_clock::local_time());
 	GeomDataSource& gds = *make_example_gds(sizes[isize]);
