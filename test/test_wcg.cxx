@@ -1,6 +1,5 @@
 #include "WireCellGraph/WireCrossingGraph.h"
-#include "WireCellNav/ParamGDS.h"
-#include "WireCellNav/ExampleGDS.h"
+#include "WireCellNav/ExampleWires.h"
 
 #include <iostream>
 #include "boost/date_time/posix_time/posix_time_types.hpp"
@@ -76,7 +75,9 @@ int main()
     for (int isize=2; sizes[isize]>0; ++isize) {
 
 	ptime t1(microsec_clock::local_time());
-	GeomDataSource& gds = *make_example_gds(sizes[isize]);
+	IWireGeometry* wires = make_example_wires(sizes[isize]);
+	GeomDataSource gds;
+	gds.use_wires(*wires);
 	ptime t2(microsec_clock::local_time());
 	WireCrossingGraph wcg;
 	WireCellGraph::fill_wirecrossinggraph(gds, wcg);

@@ -1,5 +1,6 @@
 #include "WireCellData/GeomWire.h"
-#include "WireCellNav/ExampleGDS.h"
+#include "WireCellNav/GeomDataSource.h"
+#include "WireCellNav/ExampleWires.h"
 #include <boost/graph/adjacency_list.hpp>
 #include <vector>
 
@@ -251,7 +252,9 @@ Made CG in 1.923 seconds
     double sizes[] = { 10*units::mm, 5*units::mm, 3*units::mm, -1 };
     for (int isize=2; sizes[isize]>0; ++isize) {
 	ptime t1(microsec_clock::local_time());
-	WireCell::GeomDataSource& gds = *WireCell::make_example_gds(sizes[isize]);
+	WireCell::IWireGeometry* wires = WireCell::make_example_wires(sizes[isize]);
+	WireCell::GeomDataSource gds;
+	gds.use_wires(*wires);
 	ptime t2(microsec_clock::local_time());
 	CellGraph cg;
 	cg.load(gds);
