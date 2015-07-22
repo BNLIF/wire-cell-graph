@@ -248,7 +248,7 @@ Made CG in 1.923 seconds
 
     */
 
-    double sizes[] = { 10*units::mm, 5*units::mm, 3*units::mm, -1 };
+    double sizes[] = { 3*units::mm, 5*units::mm, 10*units::mm, -1 };
     for (int isize=2; sizes[isize]>0; ++isize) {
 	ptime t1(microsec_clock::local_time());
 	WireCell::GeomDataSource& gds = *WireCell::make_example_gds(sizes[isize]);
