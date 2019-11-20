@@ -11,7 +11,7 @@ namespace boost {
 	BOOST_INSTALL_PROPERTY(edge, properties);
 }
 
-namespace WireCellGraph {
+namespace WCPGraph {
 
     // taken from http://stackoverflow.com/questions/671714/modifying-vertex-properties-in-a-boostgraph
     /// A class that manages a graph with properties associated with vertices and edges.

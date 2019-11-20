@@ -1,6 +1,6 @@
-#include "WireCellGraph/BoundCellGraph.h"
+#include "WCPGraph/BoundCellGraph.h"
 
-using namespace WireCellGraph;
+using namespace WCPGraph;
 
 BoundCellGraph::BoundCellGraph(WireCrossingGraph& wcg)
     : PropertyGraph()

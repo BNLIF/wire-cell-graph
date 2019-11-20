@@ -1,17 +1,17 @@
-#include "WireCellGraph/WireCrossingGraph.h"
+#include "WCPGraph/WireCrossingGraph.h"
 
-#include "WireCellData/GeomWire.h"
+#include "WCPData/GeomWire.h"
 
 #include <iostream> // debug
 
-using namespace WireCellGraph;
+using namespace WCPGraph;
 
-void WireCellGraph::fill_wirecrossinggraph(WireCell::GeomDataSource& gds, 
+void WCPGraph::fill_wirecrossinggraph(WCP::GeomDataSource& gds, 
 					   WireCrossingGraph& wcg)
 {
-    WireCell::GeomWireSelection u_wires = gds.wires_in_plane(WireCell::kUwire);
-    WireCell::GeomWireSelection v_wires = gds.wires_in_plane(WireCell::kVwire);
-    WireCell::GeomWireSelection w_wires = gds.wires_in_plane(WireCell::kYwire);
+    WCP::GeomWireSelection u_wires = gds.wires_in_plane(WCP::kUwire);
+    WCP::GeomWireSelection v_wires = gds.wires_in_plane(WCP::kVwire);
+    WCP::GeomWireSelection w_wires = gds.wires_in_plane(WCP::kYwire);
 
     // std::cerr << "U:" << u_wires.size() << " "
     // 	      << "V:" << v_wires.size() << " "
@@ -32,13 +32,13 @@ void WireCellGraph::fill_wirecrossinggraph(WireCell::GeomDataSource& gds,
 
     for (int u_ind=0; u_ind < u_wires.size(); ++u_ind) {
 	WireCrossingGraph::Vertex& u_vertex = u_vertices[u_ind];
-	const WireCell::GeomWire& u_wire = *u_wires[u_ind];
+	const WCP::GeomWire& u_wire = *u_wires[u_ind];
 
 	for (int v_ind=0; v_ind < v_wires.size(); ++v_ind) {
 	    WireCrossingGraph::Vertex& v_vertex = v_vertices[v_ind];
-	    const WireCell::GeomWire& v_wire = *v_wires[v_ind];
+	    const WCP::GeomWire& v_wire = *v_wires[v_ind];
 
-	    WireCell::Vector pt_uv;
+	    WCP::Vector pt_uv;
 	    if (! gds.crossing_point(u_wire, v_wire, pt_uv)) {
 		continue;
 	    }
@@ -47,14 +47,14 @@ void WireCellGraph::fill_wirecrossinggraph(WireCell::GeomDataSource& gds,
 
 	    for (int w_ind=0; w_ind < w_wires.size(); ++w_ind) {
 		WireCrossingGraph::Vertex& w_vertex = w_vertices[w_ind];
-		const WireCell::GeomWire& w_wire = *w_wires[w_ind];
+		const WCP::GeomWire& w_wire = *w_wires[w_ind];
     
-		WireCell::Vector pt_uw;
+		WCP::Vector pt_uw;
 		if (gds.crossing_point(u_wire, w_wire, pt_uw)) {
 		    wcg.AddEdge(u_vertex, w_vertex, PointProperty(pt_uw));
 		}
 		
-		WireCell::Vector pt_vw;
+		WCP::Vector pt_vw;
 		if (gds.crossing_point(v_wire, w_wire, pt_vw)) {
 		    wcg.AddEdge(v_vertex, w_vertex, PointProperty(pt_vw));
 		}

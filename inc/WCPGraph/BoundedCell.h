@@ -1,15 +1,15 @@
 #ifndef WIRECELLDATA_BOUNDEDCELL
 #define WIRECELLDATA_BOUNDEDCELL
 
-#include "WireCellData/Point.h"
-#include "WireCellData/GeomWire.h"
+#include "WCPData/Point.h"
+#include "WCPData/GeomWire.h"
 
-namespace WireCell {
+namespace WCP {
 
     /// Simplest representation of a cell.
     struct BoundedCell {
-	WireCell::PointVector bounds;
-	WireCell::GeomWireSelection wires;
+	WCP::PointVector bounds;
+	WCP::GeomWireSelection wires;
     };
 
     /// Collection of BoundedCells

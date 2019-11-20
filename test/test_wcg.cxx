@@ -1,6 +1,6 @@
-#include "WireCellGraph/WireCrossingGraph.h"
-#include "WireCellNav/ParamGDS.h"
-#include "WireCellNav/ExampleGDS.h"
+#include "WCPGraph/WireCrossingGraph.h"
+#include "WCPNav/ParamGDS.h"
+#include "WCPNav/ExampleGDS.h"
 
 #include <iostream>
 #include "boost/date_time/posix_time/posix_time_types.hpp"
@@ -8,8 +8,8 @@
 using namespace boost::posix_time;
 
 using namespace std;
-using namespace WireCell;
-using namespace WireCellGraph;
+using namespace WCP;
+using namespace WCPGraph;
 
 void dump_time(std::string msg, ptime t1, ptime t2)
 {
@@ -79,7 +79,7 @@ int main()
 	GeomDataSource& gds = *make_example_gds(sizes[isize]);
 	ptime t2(microsec_clock::local_time());
 	WireCrossingGraph wcg;
-	WireCellGraph::fill_wirecrossinggraph(gds, wcg);
+	WCPGraph::fill_wirecrossinggraph(gds, wcg);
 	ptime t3(microsec_clock::local_time());
 
 	cout << "Wire pitch: " << sizes[isize]/units::mm << " mm\n";

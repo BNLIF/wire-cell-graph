@@ -1,5 +1,5 @@
-#include "WireCellData/GeomWire.h"
-#include "WireCellNav/ExampleGDS.h"
+#include "WCPData/GeomWire.h"
+#include "WCPNav/ExampleGDS.h"
 #include <boost/graph/adjacency_list.hpp>
 #include <vector>
 
@@ -51,7 +51,7 @@ public:
     ~CellGraph() {/*pew pew*/};
     
     /// Convert from 3d point to 2d position in the transverse plane
-    PositionVector dim3to2(WireCell::PointVector& points) {
+    PositionVector dim3to2(WCP::PointVector& points) {
 	PositionVector ret;
 	for (int ind=0; ind<points.size(); ++ind) {
 	    ret.push_back(Position(points[ind].z, points[ind].y));
@@ -60,7 +60,7 @@ public:
     }
 
     /// Record one position
-    void record(WireCell::PointVector& pcell) {
+    void record(WCP::PointVector& pcell) {
 
 	PositionVector pos = dim3to2(pcell);
 
@@ -110,15 +110,15 @@ public:
 
     }
 
-    void load(WireCell::GeomDataSource& gds) {
-	using namespace WireCell;
+    void load(WCP::GeomDataSource& gds) {
+	using namespace WCP;
 
 	std::vector<float> area_property;
 	std::vector<EdgeType_t> edge_types_property;
 
-	WireCell::GeomWireSelection u_wires = gds.wires_in_plane(kUwire);
-	WireCell::GeomWireSelection v_wires = gds.wires_in_plane(kVwire);
-	WireCell::GeomWireSelection w_wires = gds.wires_in_plane(kYwire);
+	WCP::GeomWireSelection u_wires = gds.wires_in_plane(kUwire);
+	WCP::GeomWireSelection v_wires = gds.wires_in_plane(kVwire);
+	WCP::GeomWireSelection w_wires = gds.wires_in_plane(kYwire);
 
 	float pitch_u = gds.pitch(kUwire);
 	float pitch_v = gds.pitch(kVwire);
@@ -133,12 +133,12 @@ public:
 
 	
 	for (int u_ind=0; u_ind < u_wires.size(); ++u_ind) {
-	    const WireCell::GeomWire& u_wire = *u_wires[u_ind];
+	    const WCP::GeomWire& u_wire = *u_wires[u_ind];
 	    float dis_u_wire = gds.wire_dist(u_wire);
 	    float dis_u[2] = { dis_u_wire - pitch_u, dis_u_wire + pitch_u }; // half-line minmax
 
 	    for (int v_ind=0; v_ind < v_wires.size(); ++v_ind) {
-		const WireCell::GeomWire& v_wire = *v_wires[v_ind];
+		const WCP::GeomWire& v_wire = *v_wires[v_ind];
 		float dis_v_wire = gds.wire_dist(v_wire);
 		float dis_v[2] = { dis_v_wire - pitch_v, dis_v_wire + pitch_v };
 
@@ -154,11 +154,11 @@ public:
 		}
 
 		for (int w_ind=0; w_ind < w_wires.size(); ++w_ind) {
-		    const WireCell::GeomWire& w_wire = *w_wires[w_ind];
+		    const WCP::GeomWire& w_wire = *w_wires[w_ind];
 		    float dis_w_wire = gds.wire_dist(w_wire);
 		    float dis_w[2] = { dis_w_wire - pitch_w, dis_w_wire + pitch_w };
 
-		    WireCell::PointVector pcell;
+		    WCP::PointVector pcell;
 
 		    for (int ind=0; ind<4; ++ind) {
 			if (dis_w[0] <= dis_puv[ind] && dis_puv[ind] < dis_w[1]) {
@@ -172,7 +172,7 @@ public:
 
 		    for (int ind=0; ind<4; ++ind) {
 			{		// fresh scope
-			    WireCell::Vector pointvec;
+			    WCP::Vector pointvec;
 			    if (gds.crossing_point(dis_u[box_ind[ind].first], dis_w[box_ind[ind].second], 
 						   kUwire, kYwire, pointvec)) 
 			    {
@@ -184,7 +184,7 @@ public:
 			}
 
 			{		// fresh scope
-			    WireCell::Vector pointvec;
+			    WCP::Vector pointvec;
 			    if (gds.crossing_point(dis_v[box_ind[ind].first], dis_w[box_ind[ind].second], 
 						   kVwire, kYwire, pointvec)) 
 			    {
@@ -251,7 +251,7 @@ Made CG in 1.923 seconds
     double sizes[] = { 3*units::mm, 5*units::mm, 10*units::mm, -1 };
     for (int isize=2; sizes[isize]>0; ++isize) {
 	ptime t1(microsec_clock::local_time());
-	WireCell::GeomDataSource& gds = *WireCell::make_example_gds(sizes[isize]);
+	WCP::GeomDataSource& gds = *WCP::make_example_gds(sizes[isize]);
 	ptime t2(microsec_clock::local_time());
 	CellGraph cg;
 	cg.load(gds);

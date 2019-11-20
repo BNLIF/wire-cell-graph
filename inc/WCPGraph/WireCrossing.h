@@ -3,11 +3,11 @@
 
 #include <boost/graph/adjacency_list.hpp>
 
-namespace WireCellGraph {
+namespace WCPGraph {
 
 struct WireRef {
-    const WireCell::GeomWire* wire;
-    WireRef(const WireCell::GeomWire* w) : wire(w) {};
+    const WCP::GeomWire* wire;
+    WireRef(const WCP::GeomWire* w) : wire(w) {};
 }
 
 #endif

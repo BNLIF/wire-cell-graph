@@ -2,9 +2,9 @@
 #define WIRECELLGRAPH_GRAPH
 
 #include <boost/graph/adjacency_list.hpp>
-#include "WireCellGraph/Properties.h"
+#include "WCPGraph/Properties.h"
 
-namespace WireCellGraph {
+namespace WCPGraph {
 
 
     class WireCrossingGraph {
